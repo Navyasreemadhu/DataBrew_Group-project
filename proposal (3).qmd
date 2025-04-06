@@ -1,0 +1,155 @@
+---
+title: "The Great American Coffee Taste Test "
+subtitle: "Proposal"
+author: 
+  - name: "R-oasted Data Brew"
+    affiliations:
+      - name: "College of Information Science, University of Arizona"
+description: "A breakdown of 'The Great American Coffee Taste Test' data specifically looking to explore relationships between demographics and taste preferences."
+format:
+  html:
+    code-tools: true
+    code-overflow: wrap
+    code-line-numbers: true
+    embed-resources: true
+editor: visual
+code-annotations: hover
+execute:
+  warning: false
+---
+
+```{r}
+#| label: load-pkgs
+#| message: false
+library(tidyverse)
+```
+
+## Data-set
+
+```{r}
+#| label: load-dataset
+coffee_survey <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-14/coffee_survey.csv')
+#| message: false
+```
+
+**Data-set Description:** 
+
+The chosen data-set for this project is "**The Great American Coffee Taste Test**" from TidyTuesday (Week 21, 2024). In October 2023, "world champion barista" James Hoffmann and coffee company Cometeer held the "Great American Coffee Taste Test" on YouTube, during which viewers were asked to fill out a survey about 4 coffees they ordered from Cometeer for the tasting.  
+
+Based on the research conducted by the NIH: National Institutes of Health, which found that 75% of U.S. adults over the age of 20 drink coffee, with 49% drinking it daily, coffee consumption is clearly a significant part of American culture and daily life. This widespread prevalence of coffee consumption makes it an ideal subject for data analysis, as it offers insights into behavior patterns that affect a large portion of the population.
+
+**Why This Data-set?** 
+
+This data-set was chosen for several reasons: 
+
+-   It offers a good mix of categorical and numerical variables: coffee preferences (categorical), preferred roast level (categorical), coffee expertise (categorical), and coffee strength preference (numerical). 
+
+-   The topic of coffee is relatable and allows for interesting questions about consumer preferences. 
+
+-   The data provides an opportunity to explore relationships between demographics and taste preferences. 
+
+```{r}
+#dimension of data 
+
+dim(coffee_survey) 
+```
+
+**Dimensions**: The data-set contains 4,042 rows (observations) and 57 columns (variables).
+
+```{r}
+#Summary of Dataset:  
+
+summary(coffee_survey) 
+
+```
+
+-   The data-set includes a variety of variables such as:
+
+-   Demographic information (age\[char\], gender\[char\])
+
+-   Coffee consumption habits (cups\[char\], favorite\[char\], brew\[char\])
+
+-   Coffee preferences (roast_level\[char\], strength\[char\], additions\[char\])
+
+-   Self-rated coffee expertise (expertise\[num\])
+
+```{r}
+#Data Preview: 
+
+head(coffee_survey) 
+```
+
+Structure of coffee_survey data-set, showing each column and its class
+
+```{r}
+str(coffee_survey)
+
+```
+
+Checking for all the NA values in our data-set.
+
+```         
+[1] 56764
+```
+
+```{r}
+
+sum(is.na(coffee_survey))
+
+
+```
+
+Checking how many NA values are there in each column.
+
+```{r}
+colSums(is.na(coffee_survey))
+
+```
+
+To check the number of unique values in each column: 
+
+```{r}
+sapply(coffee_survey, function(x) length(unique(x))) 
+```
+
+```{r}
+coffee_survey[!complete.cases(coffee_survey), ]
+
+```
+
+-   The plan is to eliminate NA values Row wise for a set of columns that will be used for each question, this would be implemented based on the high priority column first to the least. This will ensure no incompetency in the data/columns used for the visualization.
+
+# **Questions**
+
+**Question 1: Why do people choose to drink coffee, what roast preference are common, where do they typically drink it, and how much do they spend on coffee overall?** 
+
+**Introduction** 
+
+We are interested in this question because understanding the coffee consumption habits of individuals offers valuable insights into consumer behavior, lifestyle preferences, and spending patterns. Coffee is an integral part of daily life for many people around the world, and studying why people choose to drink coffee, their preferred roast, where they typically consume it, and how much they spend can reveal a lot about personal tastes, habits, and economic factors. These factors could also provide valuable information for businesses in the coffee industry, helping them tailor their products and marketing strategies more effectively. 
+
+To answer this question the key components required in the coffee dataset include these attributes—total_spend, why_drink, where_drink, and roast_level—will provide a comprehensive understanding of coffee consumption behavior, revealing insights into consumer motivations, preferences, spending habits, and lifestyle choices. Currently we are planning to use a Bar plot and a Box plot, to visualize categorical data, such as why_drink (reasons for drinking coffee), roast_level (coffee roast preferences) and to visualize the distribution of total_spend by where_drink (locations where people drink coffee).
+
+**Question No.2: How do age and gender impact preferences for various types of coffee and the use of additives?** 
+
+**Introduction** 
+
+We are particularly interested in this question because age and gender are two important demographic factors that often influence consumer behavior, including preferences for different types of coffee and the use of additives such as sugar, milk, and cream. People from different age groups or genders may gravitate toward specific coffee types (e.g., espresso, cappuccino, black coffee) and may prefer different levels of customization when it comes to additives. By exploring how age and gender impact these preferences, we can gain insight into how demographic characteristics shape coffee consumption patterns.  
+
+To address this question, key parts of the data-set include 4 columns ‘favorite’ , ‘age’ , ‘gender’, ‘additions’.. These components will allow for a detailed analysis of how coffee preferences (By coffee preference we meant variable "favorite") vary across different age groups and between genders, helping to uncover meaningful patterns in consumer behavior. For this question we will be using an Sankey Plot.
+
+# **Variables to be Created:** 
+
+-   As of now no new categorical variable creation might be required. (might be in future)  
+
+-   External Data (not anticipated) : This project is not expected to require merging with external data sources at this point.
+
+# **Plan of Attack**
+
+|                                  |             |                                                                      |             |               |                                                                         |
+|------------|------------|------------|------------|------------|------------|
+| **Task Name**                    | **Status**  | **Assignee**                                                         | **Due**     | **Priority**  | **Summary**                                                             |
+| Load and explore data            | Completed   | Sohan, Ajeet, Navya, Ram Teja (as everyone needs to understand data) | 9/20/2024   | Moderate      | Read data, check data types, identify missing values.                   |
+| Prepare data for visualizations  | In-progress | Navya, Ram Teja                                                      | 9/23/2024   | High          | Create new variables if needed, clean and format data.                  |
+| Create visualizations (Q1)       | To Do       | Ajeet, Ram Teja                                                      | 9/27/2024   | High          | Generate Boxplots and Barplot for Q1.                                   |
+| Create visualizations (Q2)       | To Do       | Sohan, Navya                                                         | 9/30/2024   | High          | Generate a Sankey plot for Q2.                                          |
+| Write-up and interpretation      | To Do       | Ajeet, Ram Teja, Navya, Sohan (need everyone's point of view)        | 10/04/2024  | Moderate      | Explain findings, discuss insights, limitations, and draw conclusions.  |
